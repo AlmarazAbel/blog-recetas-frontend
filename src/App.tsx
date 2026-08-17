@@ -3,11 +3,13 @@ import Recetas from "./pages/Recetas";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import DetalleReceta from "./pages/DetalleReceta";
-import Login from "./pages/Login";
+import { Login } from "./pages/Login";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   return (
     <BrowserRouter>
+     <AuthProvider>
     <Navbar />
 
       <Routes>
@@ -20,6 +22,7 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
       </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
