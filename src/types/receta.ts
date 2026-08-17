@@ -17,3 +17,12 @@ export interface Receta {
   createdAt: string;
   updatedAt: string;
 }
+export interface CrearRecetaData {
+  titulo: string;
+  descripcion: string;
+  ingredientes: string[];
+  preparacion: string;
+  tiempoPreparacion: number;
+  dificultad: "facil" | "media" | "dificil";
+  imagen: string;
+}

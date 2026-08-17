@@ -1,43 +1,121 @@
 import { Link, useNavigate } from "react-router-dom";
-import { estaAutenticado, cerrarSesion } from "../services/authService";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const navigate = useNavigate();
-  const autenticado = estaAutenticado();
+  const {
+    usuario,
+    estaAutenticado,
+    cargando,
+    cerrarSesion,
+  } = useAuth();
 
-  const handleLogout = () => {
-    cerrarSesion();
-    navigate("/");
+  const navigate = useNavigate();
+
+  const handleCerrarSesion = async () => {
+    await cerrarSesion();
+    navigate("/login");
   };
 
+  if (cargando) {
+    return null;
+  }
+
   return (
-    <nav className="navbar navbar-expand-lg bg-dark navbar-dark">
+    <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container">
-        <Link className="navbar-brand" to="/">
+
+        <Link
+          className="navbar-brand"
+          to="/"
+        >
           Blog de Recetas
         </Link>
 
-        <div className="navbar-nav">
-          <Link className="nav-link" to="/">
-            Inicio
-          </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
-          <Link className="nav-link" to="/recetas">
-            Recetas
-          </Link>
+        <div
+          className="collapse navbar-collapse"
+          id="navbarNav"
+        >
+          <ul className="navbar-nav me-auto">
 
-          {!autenticado ? (
-            <Link className="nav-link" to="/login">
-              Iniciar sesión
-            </Link>
-          ) : (
-            <button
-              className="nav-link btn btn-link"
-              onClick={handleLogout}
-            >
-              Cerrar sesión
-            </button>
-          )}
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to="/"
+              >
+                Inicio
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to="/recetas"
+              >
+                Recetas
+              </Link>
+            </li>
+
+            {estaAutenticado && (
+              <li className="nav-item">
+                <Link
+                  className="nav-link"
+                  to="/crear-receta"
+                >
+                  Crear receta
+                </Link>
+              </li>
+            )}
+
+          </ul>
+
+          <div className="d-flex align-items-center gap-2">
+
+            {estaAutenticado ? (
+              <>
+                <span className="navbar-text">
+                  Hola, {usuario?.nombre}
+                </span>
+
+                <button
+                  type="button"
+                  className="btn btn-outline-danger"
+                  onClick={handleCerrarSesion}
+                >
+                  Cerrar sesión
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="btn btn-primary"
+                >
+                  Iniciar sesión
+                </Link>
+
+                <Link
+                  to="/registro"
+                  className="btn btn-outline-primary"
+                >
+                  Registrarse
+                </Link>
+              </>
+            )}
+
+          </div>
+
         </div>
       </div>
     </nav>

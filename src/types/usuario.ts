@@ -1,5 +1,6 @@
 export interface Usuario {
-  id: string;
+  _id: string;
+  nombre: string;
   email: string;
 }
 
@@ -10,5 +11,4 @@ export interface LoginData {
 
 export interface LoginResponse {
   mensaje: string;
-  token: string;
 }

@@ -1,4 +1,4 @@
-import type { Receta } from "../types/receta";
+import type { CrearRecetaData, Receta } from "../types/receta";
 
 const API_URL = "http://localhost:3000/api/recetas";
 
@@ -13,9 +13,7 @@ export const obtenerRecetas = async (): Promise<Receta[]> => {
 
   return recetas;
 };
-export const obtenerRecetaPorId = async (
-  id: string
-): Promise<Receta> => {
+export const obtenerRecetaPorId = async (id: string): Promise<Receta> => {
   const respuesta = await fetch(`${API_URL}/${id}`);
 
   if (!respuesta.ok) {
@@ -25,4 +23,23 @@ export const obtenerRecetaPorId = async (
   const receta: Receta = await respuesta.json();
 
   return receta;
+};
+
+export const crearReceta = async (datos: CrearRecetaData): Promise<Receta> => {
+  const respuesta = await fetch(API_URL, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(datos),
+  });
+
+  const datosRespuesta = await respuesta.json();
+
+  if (!respuesta.ok) {
+    throw new Error(datosRespuesta.mensaje || "Error al crear la receta");
+  }
+
+  return datosRespuesta;
 };
