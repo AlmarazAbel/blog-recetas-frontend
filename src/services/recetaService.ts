@@ -13,3 +13,16 @@ export const obtenerRecetas = async (): Promise<Receta[]> => {
 
   return recetas;
 };
+export const obtenerRecetaPorId = async (
+  id: string
+): Promise<Receta> => {
+  const respuesta = await fetch(`${API_URL}/${id}`);
+
+  if (!respuesta.ok) {
+    throw new Error("Error al obtener la receta");
+  }
+
+  const receta: Receta = await respuesta.json();
+
+  return receta;
+};
