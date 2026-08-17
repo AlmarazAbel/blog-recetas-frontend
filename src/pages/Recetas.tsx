@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Receta } from "../types/receta";
 import { obtenerRecetas } from "../services/recetaService";
+import RecipeCard from "../components/RecipeCard";
 
 const Recetas = () => {
   const [recetas, setRecetas] = useState<Receta[]>([]);
@@ -33,43 +34,16 @@ const Recetas = () => {
 
   return (
     <main className="container py-5">
-      <h1 className="text-center mb-4 text-primary">Blog de Recetas</h1>
+      <h1 className="text-center mb-4 text-primary">
+        Blog de Recetas
+      </h1>
 
       <div className="row g-4">
         {recetas.map((receta) => (
-          <div className="col-md-6 col-lg-4" key={receta._id}>
-            <div className="card h-100 shadow-sm">
-              {receta.imagen && (
-                <img
-                  src={receta.imagen}
-                  className="card-img-top"
-                  alt={receta.titulo}
-                />
-              )}
-
-              <div className="card-body">
-                <h5 className="card-title">{receta.titulo}</h5>
-
-                <p className="card-text">
-                  {receta.descripcion}
-                </p>
-
-                <p className="mb-1">
-                  <strong>Tiempo:</strong>{" "}
-                  {receta.tiempoPreparacion} minutos
-                </p>
-
-                <p className="mb-1">
-                  <strong>Dificultad:</strong>{" "}
-                  {receta.dificultad}
-                </p>
-
-                <p className="text-muted mb-0">
-                  Por: {receta.usuario.nombre}
-                </p>
-              </div>
-            </div>
-          </div>
+          <RecipeCard
+            key={receta._id}
+            receta={receta}
+          />
         ))}
       </div>
     </main>
