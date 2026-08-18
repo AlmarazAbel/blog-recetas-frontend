@@ -17,23 +17,18 @@ interface AuthContextType {
   usuario: Usuario | null;
   estaAutenticado: boolean;
   cargando: boolean;
-  cargarUsuario: () => Promise<void>;
+cargarUsuario: () => Promise<Usuario | null>;
   cerrarSesion: () => Promise<void>;
 }
 
-const AuthContext = createContext<
-  AuthContextType | undefined
->(undefined);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 interface AuthProviderProps {
   children: ReactNode;
 }
 
-export const AuthProvider = ({
-  children,
-}: AuthProviderProps) => {
-  const [usuario, setUsuario] =
-    useState<Usuario | null>(null);
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [usuario, setUsuario] = useState<Usuario | null>(null);
 
   const [cargando, setCargando] = useState(true);
 
@@ -41,8 +36,7 @@ export const AuthProvider = ({
   useEffect(() => {
     const verificarSesion = async () => {
       try {
-        const usuarioActual =
-          await obtenerUsuarioActual();
+        const usuarioActual = await obtenerUsuarioActual();
 
         setUsuario(usuarioActual);
       } catch {
@@ -56,30 +50,25 @@ export const AuthProvider = ({
   }, []);
 
   // Cargar usuario después del login
-  const cargarUsuario = async () => {
-    try {
-      const usuarioActual =
-        await obtenerUsuarioActual();
+const cargarUsuario = async (): Promise<Usuario | null> => {
+  try {
+    const usuarioActual = await obtenerUsuarioActual();
 
-      setUsuario(usuarioActual);
-    } catch (error) {
-      console.error(
-        "Error al obtener el usuario:",
-        error
-      );
-    }
-  };
+    setUsuario(usuarioActual);
 
+    return usuarioActual;
+  } catch (error) {
+    console.error("Error al obtener el usuario:", error);
+    return null;
+  }
+};
   // Cerrar sesión
   const cerrarSesion = async () => {
     try {
       await cerrarSesionAPI();
       setUsuario(null);
     } catch (error) {
-      console.error(
-        "Error al cerrar sesión:",
-        error
-      );
+      console.error("Error al cerrar sesión:", error);
     }
   };
 
@@ -104,9 +93,7 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error(
-      "useAuth debe utilizarse dentro de AuthProvider"
-    );
+    throw new Error("useAuth debe utilizarse dentro de AuthProvider");
   }
 
   return context;

@@ -1,20 +1,39 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
-  const {
-    usuario,
-    estaAutenticado,
-    cargando,
-    cerrarSesion,
-  } = useAuth();
+  const { usuario, estaAutenticado, cargando, cerrarSesion } = useAuth();
 
   const navigate = useNavigate();
 
   const handleCerrarSesion = async () => {
-    await cerrarSesion();
-    navigate("/login");
-  };
+  const resultado = await Swal.fire({
+    title: "¿Cerrar sesión?",
+    text: "Tu sesión se cerrará en este dispositivo.",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Sí, cerrar sesión",
+    cancelButtonText: "Cancelar",
+    reverseButtons: true,
+  });
+
+  if (!resultado.isConfirmed) {
+    return;
+  }
+
+  await cerrarSesion();
+
+  await Swal.fire({
+    icon: "success",
+    title: "Sesión cerrada",
+    text: "Hasta pronto 👋",
+    timer: 1500,
+    showConfirmButton: false,
+  });
+
+    navigate("/");
+};
 
   if (cargando) {
     return null;
@@ -23,11 +42,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container">
-
-        <Link
-          className="navbar-brand"
-          to="/"
-        >
+        <Link className="navbar-brand" to="/">
           Blog de Recetas
         </Link>
 
@@ -43,50 +58,33 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div
-          className="collapse navbar-collapse"
-          id="navbarNav"
-        >
+        <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto">
-
             <li className="nav-item">
-              <Link
-                className="nav-link"
-                to="/"
-              >
+              <Link className="nav-link" to="/">
                 Inicio
               </Link>
             </li>
 
             <li className="nav-item">
-              <Link
-                className="nav-link"
-                to="/recetas"
-              >
+              <Link className="nav-link" to="/recetas">
                 Recetas
               </Link>
             </li>
 
             {estaAutenticado && (
               <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  to="/crear-receta"
-                >
+                <Link className="nav-link" to="/crear-receta">
                   Crear receta
                 </Link>
               </li>
             )}
-
           </ul>
 
           <div className="d-flex align-items-center gap-2">
-
             {estaAutenticado ? (
               <>
-                <span className="navbar-text">
-                  Hola, {usuario?.nombre}
-                </span>
+                <span className="navbar-text">Hola, {usuario?.nombre}</span>
 
                 <button
                   type="button"
@@ -98,24 +96,16 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link
-                  to="/login"
-                  className="btn btn-primary"
-                >
+                <Link to="/login" className="btn btn-primary">
                   Iniciar sesión
                 </Link>
 
-                <Link
-                  to="/registro"
-                  className="btn btn-outline-primary"
-                >
+                <Link to="/registro" className="btn btn-outline-primary">
                   Registrarse
                 </Link>
               </>
             )}
-
           </div>
-
         </div>
       </div>
     </nav>

@@ -5,23 +5,21 @@ import Navbar from "./components/Navbar";
 import DetalleReceta from "./pages/DetalleReceta";
 import { Login } from "./pages/Login";
 import { AuthProvider } from "./context/AuthContext";
+import CrearReceta from "./pages/CrearReceta";
 
 function App() {
   return (
     <BrowserRouter>
-     <AuthProvider>
-    <Navbar />
+      <AuthProvider>
+        <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/recetas" element={<Recetas />} />
-        <Route
-          path="/recetas/:id"
-          element={<DetalleReceta />}
-          
-        />
-        <Route path="/login" element={<Login />} />
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/recetas" element={<Recetas />} />
+          <Route path="/recetas/:id" element={<DetalleReceta />} />
+          <Route path="/crear-receta" element={<CrearReceta />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
       </AuthProvider>
     </BrowserRouter>
   );
