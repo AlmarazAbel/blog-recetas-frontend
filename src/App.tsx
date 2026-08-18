@@ -6,6 +6,7 @@ import DetalleReceta from "./pages/DetalleReceta";
 import { Login } from "./pages/Login";
 import { AuthProvider } from "./context/AuthContext";
 import CrearReceta from "./pages/CrearReceta";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -17,7 +18,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/recetas" element={<Recetas />} />
           <Route path="/recetas/:id" element={<DetalleReceta />} />
-          <Route path="/crear-receta" element={<CrearReceta />} />
+
+          <Route element={<ProtectedRoute />}>
+            <Route path="/crear-receta" element={<CrearReceta />} />
+          
+          </Route>
           <Route path="/login" element={<Login />} />
         </Routes>
       </AuthProvider>
