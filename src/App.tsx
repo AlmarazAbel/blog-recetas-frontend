@@ -7,6 +7,7 @@ import { Login } from "./pages/Login";
 import { AuthProvider } from "./context/AuthContext";
 import CrearReceta from "./pages/CrearReceta";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { Registro } from "./pages/Registro";
 
 function App() {
   return (
@@ -21,9 +22,9 @@ function App() {
 
           <Route element={<ProtectedRoute />}>
             <Route path="/crear-receta" element={<CrearReceta />} />
-          
           </Route>
           <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Registro />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

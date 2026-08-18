@@ -1,4 +1,10 @@
-import type { LoginData, LoginResponse, Usuario } from "../types/usuario";
+import type {
+  LoginData,
+  LoginResponse,
+  RegistroData,
+  RegistroResponse,
+  Usuario,
+} from "../types/usuario";
 
 const API_URL = "http://localhost:3000/api/usuarios";
 
@@ -22,7 +28,29 @@ export const iniciarSesion = async (
 
   return datosRespuesta;
 };
+export const registrarUsuario = async (
+  datos: RegistroData,
+): Promise<RegistroResponse> => {
+  const respuesta = await fetch(`${API_URL}/registro`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(datos),
+  });
 
+  const datosRespuesta = await respuesta.json();
+
+  if (!respuesta.ok) {
+    throw new Error(
+      datosRespuesta.mensaje ||
+        "Error al registrar usuario",
+    );
+  }
+
+  return datosRespuesta;
+};
 export const obtenerUsuarioActual = async (): Promise<Usuario> => {
   const respuesta = await fetch(`${API_URL}/me`, {
     credentials: "include",

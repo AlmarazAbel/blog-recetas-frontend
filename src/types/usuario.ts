@@ -1,5 +1,5 @@
 export interface Usuario {
-  _id: string;
+  id: string;
   nombre: string;
   email: string;
 }
@@ -11,4 +11,18 @@ export interface LoginData {
 
 export interface LoginResponse {
   mensaje: string;
+}
+
+export interface RegistroData {
+  nombre: string;
+  email: string;
+  password: string;
+}
+
+export interface RegistroResponse {
+  mensaje: string;
+  usuario: {
+    nombre: string;
+    email: string;
+  };
 }
