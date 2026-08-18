@@ -17,6 +17,7 @@ interface AuthContextType {
   usuario: Usuario | null;
   estaAutenticado: boolean;
   cargando: boolean;
+  cargarUsuario: () => Promise<void>;
   cerrarSesion: () => Promise<void>;
 }
 
@@ -36,6 +37,7 @@ export const AuthProvider = ({
 
   const [cargando, setCargando] = useState(true);
 
+  // Verificar sesión al cargar la aplicación
   useEffect(() => {
     const verificarSesion = async () => {
       try {
@@ -53,12 +55,31 @@ export const AuthProvider = ({
     verificarSesion();
   }, []);
 
+  // Cargar usuario después del login
+  const cargarUsuario = async () => {
+    try {
+      const usuarioActual =
+        await obtenerUsuarioActual();
+
+      setUsuario(usuarioActual);
+    } catch (error) {
+      console.error(
+        "Error al obtener el usuario:",
+        error
+      );
+    }
+  };
+
+  // Cerrar sesión
   const cerrarSesion = async () => {
     try {
       await cerrarSesionAPI();
       setUsuario(null);
     } catch (error) {
-      console.error("Error al cerrar sesión:", error);
+      console.error(
+        "Error al cerrar sesión:",
+        error
+      );
     }
   };
 
@@ -70,6 +91,7 @@ export const AuthProvider = ({
         usuario,
         estaAutenticado,
         cargando,
+        cargarUsuario,
         cerrarSesion,
       }}
     >

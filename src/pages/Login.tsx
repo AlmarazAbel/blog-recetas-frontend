@@ -6,27 +6,27 @@ import { useAuth } from "../context/AuthContext";
 
 export const Login = () => {
   const navigate = useNavigate();
- const { guardarToken } = useAuth();
-
+  const { cargarUsuario } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
 
-  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    event: SubmitEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
 
     setError("");
     setCargando(true);
 
     try {
-      const respuesta = await iniciarSesion({
+      await iniciarSesion({
         email,
         password,
       });
-
-      guardarToken(respuesta.token);
+await cargarUsuario();;
 
       navigate("/recetas");
     } catch (error) {
@@ -46,13 +46,24 @@ export const Login = () => {
         <div className="col-md-6 col-lg-4">
           <div className="card shadow">
             <div className="card-body p-4">
-              <h1 className="text-center mb-4">Iniciar sesión</h1>
 
-              {error && <div className="alert alert-danger">{error}</div>}
+              <h1 className="text-center mb-4">
+                Iniciar sesión
+              </h1>
+
+              {error && (
+                <div className="alert alert-danger">
+                  {error}
+                </div>
+              )}
 
               <form onSubmit={handleSubmit}>
+
                 <div className="mb-3">
-                  <label htmlFor="email" className="form-label">
+                  <label
+                    htmlFor="email"
+                    className="form-label"
+                  >
                     Email
                   </label>
 
@@ -61,13 +72,18 @@ export const Login = () => {
                     type="email"
                     className="form-control"
                     value={email}
-                    onChange={(event) => setEmail(event.target.value)}
+                    onChange={(event) =>
+                      setEmail(event.target.value)
+                    }
                     required
                   />
                 </div>
 
                 <div className="mb-3">
-                  <label htmlFor="password" className="form-label">
+                  <label
+                    htmlFor="password"
+                    className="form-label"
+                  >
                     Contraseña
                   </label>
 
@@ -76,7 +92,9 @@ export const Login = () => {
                     type="password"
                     className="form-control"
                     value={password}
-                    onChange={(event) => setPassword(event.target.value)}
+                    onChange={(event) =>
+                      setPassword(event.target.value)
+                    }
                     required
                   />
                 </div>
@@ -86,13 +104,19 @@ export const Login = () => {
                   className="btn btn-primary w-100"
                   disabled={cargando}
                 >
-                  {cargando ? "Iniciando sesión..." : "Iniciar sesión"}
+                  {cargando
+                    ? "Iniciando sesión..."
+                    : "Iniciar sesión"}
                 </button>
+
               </form>
 
               <div className="text-center mt-3">
-                <Link to="/registro">¿No tenés una cuenta? Registrate</Link>
+                <Link to="/registro">
+                  ¿No tenés una cuenta? Registrate
+                </Link>
               </div>
+
             </div>
           </div>
         </div>
