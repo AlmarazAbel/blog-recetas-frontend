@@ -26,3 +26,11 @@ export interface RegistroResponse {
     email: string;
   };
 }
+export interface VerificarEmailData {
+  email: string;
+  codigo: string;
+}
+
+export interface VerificarEmailResponse {
+  mensaje: string;
+}

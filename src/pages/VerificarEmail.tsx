@@ -1,16 +1,19 @@
 import type { SubmitEvent } from "react";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-import { registrarUsuario } from "../services/usuarioService";
+import { verificarEmail } from "../services/usuarioService";
 
-export const Registro = () => {
+const VerificarEmail = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  
+//pasar el mail registrado desde el formulario anterior sin obligar al usuario a escribirlo de nuevo.
+  const emailDesdeRegistro = location.state?.email || "";
 
-  const [nombre, setNombre] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(emailDesdeRegistro);
+  const [codigo, setCodigo] = useState("");
 
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
@@ -24,30 +27,26 @@ export const Registro = () => {
     setCargando(true);
 
     try {
-      await registrarUsuario({
-        nombre,
+      await verificarEmail({
         email,
-        password,
+        codigo,
       });
 
       await Swal.fire({
         icon: "success",
-        title: `¡Bienvenido, ${nombre}!`,
-        text: "Tu usuario fue registrado correctamente.",
+        title: "¡Email verificado!",
+        text: "Tu cuenta fue verificada correctamente.",
         timer: 1800,
         showConfirmButton: false,
       });
 
-      navigate("/verificar-email", {
-  state: {
-    email,
-  },
-});
+      navigate("/login");
+
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
       } else {
-        setError("Error al registrar el usuario");
+        setError("Error al verificar el email");
       }
     } finally {
       setCargando(false);
@@ -62,9 +61,13 @@ export const Registro = () => {
           <div className="card shadow">
             <div className="card-body p-4">
 
-              <h1 className="text-center mb-4">
-                Crear cuenta
+              <h1 className="text-center mb-3">
+                Verificar email
               </h1>
+
+              <p className="text-center text-muted">
+                Te enviamos un código de 6 dígitos a tu correo.
+              </p>
 
               {error && (
                 <div className="alert alert-danger">
@@ -74,28 +77,6 @@ export const Registro = () => {
 
               <form onSubmit={handleSubmit}>
 
-                {/* Nombre */}
-                <div className="mb-3">
-                  <label
-                    htmlFor="nombre"
-                    className="form-label"
-                  >
-                    Nombre
-                  </label>
-
-                  <input
-                    id="nombre"
-                    type="text"
-                    className="form-control"
-                    value={nombre}
-                    onChange={(event) =>
-                      setNombre(event.target.value)
-                    }
-                    required
-                  />
-                </div>
-
-                {/* Email */}
                 <div className="mb-3">
                   <label
                     htmlFor="email"
@@ -116,23 +97,24 @@ export const Registro = () => {
                   />
                 </div>
 
-                {/* Contraseña */}
                 <div className="mb-4">
                   <label
-                    htmlFor="password"
+                    htmlFor="codigo"
                     className="form-label"
                   >
-                    Contraseña
+                    Código de verificación
                   </label>
 
                   <input
-                    id="password"
-                    type="password"
-                    className="form-control"
-                    value={password}
+                    id="codigo"
+                    type="text"
+                    className="form-control text-center"
+                    value={codigo}
                     onChange={(event) =>
-                      setPassword(event.target.value)
+                      setCodigo(event.target.value)
                     }
+                    maxLength={6}
+                    inputMode="numeric"
                     required
                   />
                 </div>
@@ -143,15 +125,15 @@ export const Registro = () => {
                   disabled={cargando}
                 >
                   {cargando
-                    ? "Registrando..."
-                    : "Registrarse"}
+                    ? "Verificando..."
+                    : "Verificar email"}
                 </button>
 
               </form>
 
               <div className="text-center mt-3">
                 <Link to="/login">
-                  ¿Ya tenés una cuenta? Iniciá sesión
+                  Volver al login
                 </Link>
               </div>
 
@@ -163,3 +145,5 @@ export const Registro = () => {
     </main>
   );
 };
+
+export default VerificarEmail;

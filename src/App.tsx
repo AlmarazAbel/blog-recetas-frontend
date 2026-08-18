@@ -8,7 +8,7 @@ import { AuthProvider } from "./context/AuthContext";
 import CrearReceta from "./pages/CrearReceta";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Registro } from "./pages/Registro";
-
+import VerificarEmail from "./pages/VerificarEmail";
 function App() {
   return (
     <BrowserRouter>
@@ -25,6 +25,7 @@ function App() {
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
+          <Route path="/verificar-email" element={<VerificarEmail />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

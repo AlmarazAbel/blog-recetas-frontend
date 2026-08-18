@@ -4,6 +4,8 @@ import type {
   RegistroData,
   RegistroResponse,
   Usuario,
+  VerificarEmailData,
+  VerificarEmailResponse,
 } from "../types/usuario";
 
 const API_URL = "http://localhost:3000/api/usuarios";
@@ -46,6 +48,28 @@ export const registrarUsuario = async (
     throw new Error(
       datosRespuesta.mensaje ||
         "Error al registrar usuario",
+    );
+  }
+
+  return datosRespuesta;
+};
+export const verificarEmail = async (
+  datos: VerificarEmailData,
+): Promise<VerificarEmailResponse> => {
+  const respuesta = await fetch(`${API_URL}/verificar`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(datos),
+  });
+
+  const datosRespuesta = await respuesta.json();
+
+  if (!respuesta.ok) {
+    throw new Error(
+      datosRespuesta.mensaje ||
+        "Error al verificar el email",
     );
   }
 
