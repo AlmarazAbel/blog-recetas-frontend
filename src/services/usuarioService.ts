@@ -75,6 +75,31 @@ export const verificarEmail = async (
 
   return datosRespuesta;
 };
+export const reenviarCodigo = async (
+  email: string,
+): Promise<{ mensaje: string }> => {
+  const respuesta = await fetch(
+    `${API_URL}/reenviar-codigo`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    },
+  );
+
+  const datosRespuesta = await respuesta.json();
+
+  if (!respuesta.ok) {
+    throw new Error(
+      datosRespuesta.mensaje ||
+        "Error al reenviar el código",
+    );
+  }
+
+  return datosRespuesta;
+};
 export const obtenerUsuarioActual = async (): Promise<Usuario> => {
   const respuesta = await fetch(`${API_URL}/me`, {
     credentials: "include",
