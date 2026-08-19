@@ -10,6 +10,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { Registro } from "./pages/Registro";
 import VerificarEmail from "./pages/VerificarEmail";
 import EditarReceta from "./pages/EditarReceta";
+import Footer from "./components/Footer";
 function App() {
   return (
     <BrowserRouter>
@@ -32,6 +33,7 @@ function App() {
           <Route path="/verificar-email" element={<VerificarEmail />} />
           
         </Routes>
+        <Footer />
       </AuthProvider>
     </BrowserRouter>
   );
