@@ -43,3 +43,40 @@ export const crearReceta = async (datos: CrearRecetaData): Promise<Receta> => {
 
   return datosRespuesta;
 };
+export const actualizarReceta = async (
+  id: string,
+  datos: CrearRecetaData
+): Promise<Receta> => {
+  const respuesta = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(datos),
+  });
+
+  const datosRespuesta = await respuesta.json();
+
+  if (!respuesta.ok) {
+    throw new Error(
+      datosRespuesta.mensaje || "Error al actualizar la receta"
+    );
+  }
+
+  return datosRespuesta.receta;
+};
+export const eliminarReceta = async (id: string): Promise<void> => {
+  const respuesta = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  const datosRespuesta = await respuesta.json();
+
+  if (!respuesta.ok) {
+    throw new Error(
+      datosRespuesta.mensaje || "Error al eliminar la receta"
+    );
+  }
+};

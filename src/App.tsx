@@ -9,6 +9,7 @@ import CrearReceta from "./pages/CrearReceta";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Registro } from "./pages/Registro";
 import VerificarEmail from "./pages/VerificarEmail";
+import EditarReceta from "./pages/EditarReceta";
 function App() {
   return (
     <BrowserRouter>
@@ -19,13 +20,17 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/recetas" element={<Recetas />} />
           <Route path="/recetas/:id" element={<DetalleReceta />} />
+          
 
           <Route element={<ProtectedRoute />}>
             <Route path="/crear-receta" element={<CrearReceta />} />
+            <Route path="/recetas/editar/:id" element={<EditarReceta />} />
           </Route>
+
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
           <Route path="/verificar-email" element={<VerificarEmail />} />
+          
         </Routes>
       </AuthProvider>
     </BrowserRouter>
