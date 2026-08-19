@@ -40,12 +40,12 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <nav className="navbar navbar-expand-lg navbar-light bg-body-tertiary">
       <div className="container">
         <Link className="navbar-brand" to="/">
           Blog de Recetas
         </Link>
-
+{/* BOTÓN HAMBURGUESA */}
         <button
           className="navbar-toggler"
           type="button"
@@ -57,7 +57,7 @@ const Navbar = () => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-
+ {/* TODO EL MENÚ */}
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto">
             <li className="nav-item">
@@ -80,7 +80,7 @@ const Navbar = () => {
               </li>
             )}
           </ul>
-
+{/* USUARIO / LOGIN */}
           <div className="d-flex align-items-center gap-2">
             {estaAutenticado ? (
               <>
