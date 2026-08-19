@@ -1,6 +1,6 @@
 import type { CrearRecetaData, Receta } from "../types/receta";
 
-const API_URL = "http://localhost:3000/api/recetas";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/recetas`;
 
 export const obtenerRecetas = async (): Promise<Receta[]> => {
   const respuesta = await fetch(API_URL);

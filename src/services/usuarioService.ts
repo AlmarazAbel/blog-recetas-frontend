@@ -8,7 +8,7 @@ import type {
   VerificarEmailResponse,
 } from "../types/usuario";
 
-const API_URL = "http://localhost:3000/api/usuarios";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/usuarios`;
 
 export const iniciarSesion = async (
   datos: LoginData,
