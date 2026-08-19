@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import type { Receta } from "../types/receta";
-import { obtenerRecetaPorId } from "../services/recetaService";
+import { obtenerRecetaPorId, eliminarReceta } from "../services/recetaService";
 import { useAuth } from "../context/AuthContext";
+import Swal from "sweetalert2";
 
 const DetalleReceta = () => {
   const { id } = useParams<{ id: string }>();
   const { usuario } = useAuth();
- 
+  const navigate = useNavigate();
 
   const [receta, setReceta] = useState<Receta | null>(null);
   const [cargando, setCargando] = useState(true);
@@ -15,7 +16,6 @@ const DetalleReceta = () => {
   const esAutor =
     usuario !== null && receta !== null && usuario._id === receta.usuario._id;
 
-   
   useEffect(() => {
     const cargarReceta = async () => {
       if (!id) {
@@ -57,7 +57,47 @@ const DetalleReceta = () => {
   if (!receta) {
     return null;
   }
+  const handleEliminar = async () => {
+    if (!id) return;
 
+    const resultado = await Swal.fire({
+      title: "¿Eliminar receta?",
+      text: "Esta acción no se puede deshacer.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (!resultado.isConfirmed) {
+      return;
+    }
+
+    try {
+      await eliminarReceta(id);
+
+      await Swal.fire({
+        title: "¡Receta eliminada!",
+        text: "La receta fue eliminada correctamente.",
+        icon: "success",
+        confirmButtonText: "Aceptar",
+      });
+
+      navigate("/recetas");
+    } catch (error) {
+      console.error(error);
+
+      Swal.fire({
+        title: "Error",
+        text:
+          error instanceof Error
+            ? error.message
+            : "No se pudo eliminar la receta.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+      });
+    }
+  };
   return (
     <main className="container py-5">
       <div className="row">
@@ -118,7 +158,11 @@ const DetalleReceta = () => {
                   Editar
                 </Link>
 
-                <button type="button" className="btn btn-danger">
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={handleEliminar}
+                >
                   Eliminar
                 </button>
               </>
